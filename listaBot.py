@@ -1,37 +1,40 @@
 import requests
 from bs4 import BeautifulSoup as bs
 
-url = 'https://m.facebook.com/pg/casadamatriz/events'
+urList = []
+urList.append('https://m.facebook.com/pg/casadamatriz/events')
 
-page = requests.get(url)
-soup = bs(page.text, 'html.parser')
-bvs = soup.findAll("span", {"class": "bv"})
+for url in urList:
+	eventsList = requests.get(url)
+	eventsListSourceCode = bs(eventsList.text, 'html.parser')
+	bvClassInEventsListSourceCode = eventsListSourceCode.findAll("span", {"class": "bv"})
 
-#brs = soup.find_all(lambda tag: tag.name == 'span' and tag.get('class') == ['br'])
-#bus = soup.find_all(lambda tag: tag.name == 'span' and tag.get('class') == ['bu'])
+	eventList = []
 
-eventList = []
+	for bvClass in bvClassInEventsListSourceCode:
+		for a in bvClass.find_all('a', href=True):
+			x = a['href'].split('?')
+			eventList.append(x[0])  							    #/events/9999999999
 
-for bv in bvs:
-	for a in bv.find_all('a', href=True):
-		x = a['href'].split('?')
-		eventList.append(x[0])  #/events/9999999999
+	eventUrl = 'https://m.facebook.com/' + eventList[0]
+	eventPage = requests.get(eventUrl)
+	eventPageSourceCode = bs(eventPage.text, 'html.parser')
+	
+	eventDateFullAndLocationName = eventPageSourceCode.findAll("div", {"class": "ct cu cg"})
+	eventTimeUntilAndStreetAddress = eventPageSourceCode.findAll("div", {"class": "cv cw cg"})
+	eventTitle = eventPageSourceCode.find('title').text
 
-url2 = 'https://m.facebook.com/' + eventList[0]
-page2 = requests.get(url2)
-soup2 = bs(page2.text, 'html.parser')
-xx = soup2.findAll("div", {"class": "ct cu cg"})
-yy = soup2.findAll("div", {"class": "cv cw cg"})
-title = soup2.find('title').text
-
-for x in xx:
-	print(x.text)
-
-for y in yy:
-	print(y.text)
-
-print(title)
-print(url2)
+	eventDateFull = eventDateFullAndLocationName[0].text
+	eventLocationName = eventDateFullAndLocationName[1].text
+	eventTimeUntil = eventTimeUntilAndStreetAddress[0].text
+	eventStreetAddress = eventTimeUntilAndStreetAddress[1].text
+		
+	print(eventDateFull)
+	print(eventLocationName)
+	print(eventTimeUntil)
+	print(eventStreetAddress)
+	print(eventTitle)
+	print(eventUrl)
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
