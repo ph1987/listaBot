@@ -196,6 +196,8 @@ for url in urList:
 	print('tagDT[0]: ' + str(tagDT[0].text))
 	print('tagDT[1]: ' + str(tagDT[1].text))
 	
+	
+	#img verificar class="be"
 '''
 
 eventDateFullAndLocationName = eventPageSourceCode.findAll("div", {"class": "ct cu cg"})
