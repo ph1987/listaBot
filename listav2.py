@@ -189,7 +189,16 @@ for url in urList:
 	
 	#print(eventPageSourceCode)
 	
-	eventDateFullAndLocationName = eventPageSourceCode.findAll("div", {"class": "ct cu cg"})
+	tagDD = eventPageSourceCode.find_all('dd')
+	print('tagDD[0]: ' + str(tagDD[0].text))
+	print('tagDD[1]: ' + str(tagDD[1].text))
+	tagDT = eventPageSourceCode.find_all('dt')
+	print('tagDT[0]: ' + str(tagDT[0].text))
+	print('tagDT[1]: ' + str(tagDT[1].text))
+	
+'''
+
+eventDateFullAndLocationName = eventPageSourceCode.findAll("div", {"class": "ct cu cg"})
 	if not eventDateFullAndLocationName:
 		#eventDateFullAndLocationName = eventPageSourceCode.findAll("div", {"class": "cq cr cd"})
 		eventDateFullAndLocationName = eventPageSourceCode.find_all("div", class_=lambda value: value and value.startswith("cq cr cd"))
@@ -236,11 +245,11 @@ for url in urList:
 	
 	# pegar tags <dd> e <dt>
 	
-	'''	
+	
 	events.append(
 		Event(eventId, eventUrl, eventTitle, eventDateFull, eventDateFull, eventLocationName, eventStreetAddress, imgSrcRaw)
 	)		
 
 	json_string = json.dumps([ob.__dict__ for ob in events], indent=4)
 	print (json_string)
-	'''
+'''
