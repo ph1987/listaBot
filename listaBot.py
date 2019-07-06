@@ -115,10 +115,6 @@ for url in urList:
 	json_string = json.dumps([ob.__dict__ for ob in events], indent=4)
 	print (json_string)
 '''
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-''' DEBUG MODE '''
-
 import requests
 from bs4 import BeautifulSoup as bs
 import json
@@ -181,66 +177,31 @@ for url in urList:
 	eventPageList = []
 	events = []
 
-	event = '/events/413592285909653'
-	eventId = event.replace('/events/', '')
-	eventUrl = 'https://m.facebook.com' + event
-	eventPage = requests.get(eventUrl)
-	eventPageSourceCode = bs(eventPage.text, 'html.parser')
-	
-	#print(eventPageSourceCode)
-	
-	eventDateFullAndLocationName = eventPageSourceCode.findAll("div", {"class": "ct cu cg"})
-	if not eventDateFullAndLocationName:
-		#eventDateFullAndLocationName = eventPageSourceCode.findAll("div", {"class": "cq cr cd"})
-		eventDateFullAndLocationName = eventPageSourceCode.find_all("div", class_=lambda value: value and value.startswith("cq cr cd"))
-		#print(eventDateFullAndLocationName)
+	for bvClass in bvClassInEventsListSourceCode:
+		for a in bvClass.find_all('a', href=True):
+			urlSplitted = a['href'].split('?')
+			eventPageList.append(urlSplitted[0])  # /events/9999999999
 		
-	eventTimeUntilAndStreetAddress = eventPageSourceCode.findAll("div", {"class": "cv cw cg"})
-	if not eventTimeUntilAndStreetAddress:
-		eventTimeUntilAndStreetAddress = eventPageSourceCode.findAll("div", {"class": "cs ct cd"})
+	for event in eventPageList:
+		eventId = event.replace('/events/', '')
+		eventUrl = 'https://m.facebook.com' + event
+		eventPage = requests.get(eventUrl)
+		eventPageSourceCode = bs(eventPage.text, 'html.parser')
+
+		tagDD = eventPageSourceCode.find_all('dd')
+		eventStreetAddress = str(tagDD[1].text)
+
+		tagDT = eventPageSourceCode.find_all('dt')
+		eventDateFull = str(tagDT[0].text)
+		eventLocationName = str(tagDT[1].text)
 		
+		tagBE = eventPageSourceCode.find("div", {"class": "be"})
+		eventImgSrc = tagBE.find('img')['src']
+		eventTitle = eventPageSourceCode.find('title').text
 		
-	imgRaw = eventPageSourceCode.find("img", {"class": "bl bm k"})
-	if imgRaw:
-		imgSrcRaw = imgRaw['src']
-	else:
-		imgRaw = eventPageSourceCode.find("img", {"class": "bf k"})
-		if imgRaw:
-			imgSrcRaw = imgRaw['src']
-		
-	eventTitle = eventPageSourceCode.find('title').text
-	
-	if eventDateFullAndLocationName:
-		if eventDateFullAndLocationName[0]:
-			eventDateFull = eventDateFullAndLocationName[0].text
-			#print(eventDateFull)
-		else:
-			eventDateFull = ''
-			#print(eventDateFull)
-		
-		if len(eventDateFullAndLocationName) >= 2:
-			eventLocationName = eventDateFullAndLocationName[1].text
-			#print(eventLocationName)
-		else:
-			eventLocationName = ''
-			#print(eventLocationName)
-	
-	if eventTimeUntilAndStreetAddress:
-		#eventTimeUntilAndWeather = eventTimeUntilAndStreetAddress[0].text
-		eventStreetAddress = eventTimeUntilAndStreetAddress[1].text
-		#print(eventStreetAddress)
-	else:
-		eventStreetAddress = ''
-		
-	print(eventDateFullAndLocationName)
-	
-	# pegar tags <dd> e <dt>
-	
-	'''	
-	events.append(
-		Event(eventId, eventUrl, eventTitle, eventDateFull, eventDateFull, eventLocationName, eventStreetAddress, imgSrcRaw)
-	)		
+		events.append(
+			Event(eventId, eventUrl, eventTitle, eventDateFull, eventDateFull, eventLocationName, eventStreetAddress, eventImgSrc)
+		)		
 
 	json_string = json.dumps([ob.__dict__ for ob in events], indent=4)
 	print (json_string)
-	'''
