@@ -121,8 +121,8 @@ for url in urList:
 
 		eventTitle = eventPageSourceCode.find('title').text
 
-		#if (datetime.datetime.now() + datetime.timedelta(hours=-6)) < eventDateFormatted:
-		if datetime.datetime.now() < eventDateFormatted:
+        #if datetime.datetime.now() < eventDateFormatted:
+		if (datetime.datetime.now() + datetime.timedelta(hours=-6)) < eventDateFormatted:
 			events.append(
 				Event(eventId, eventUrl, eventTitle, eventDateFull, str(eventDateFormatted), eventLocationName, eventStreetAddress, eventImgSrc)
 			)		
