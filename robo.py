@@ -1,8 +1,7 @@
 # src: https://gist.github.com/UndergroundLabs/fad38205068ffb904685
 import requests
 
-USERNAME = 'dickvigarista888@gmail.com'
-PASSWORD = 'paocomovo1'
+
 PROTECTED_URL = 'https://m.facebook.com/barbukowskirio/events'
 
 def auth(session, email, password):
