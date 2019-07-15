@@ -61,6 +61,7 @@ def return_monthNumber(month):
 
 urList = []
 urList.append('https://m.facebook.com/pg/casadamatriz/events')
+'''
 urList.append('https://m.facebook.com/pg/festacollegerock/events')
 urList.append('https://m.facebook.com/heavydutybeerclub/pages/permalink/?view_type=tab_events')
 urList.append('https://m.facebook.com/buffallosbar/pages/permalink/?view_type=tab_events')
@@ -74,6 +75,7 @@ urList.append('https://m.facebook.com/pg/festatripoficial/events')
 urList.append('https://m.facebook.com/TheRockBar.Rio/pages/permalink/?view_type=tab_events')
 urList.append('https://m.facebook.com/calaboucobar/pages/permalink/?view_type=tab_events')
 urList.append('https://m.facebook.com/pg/paranoidandroidparty/events')
+'''
 
 events = []
 

@@ -1,8 +1,8 @@
 # src: https://gist.github.com/UndergroundLabs/fad38205068ffb904685
 import requests
 
-
 PROTECTED_URL = 'https://m.facebook.com/barbukowskirio/events'
+#PROTECTED_URL2 = 'https://m.facebook.com/fosfoboxbarclub/events'
 
 def auth(session, email, password):
     response = session.post('https://m.facebook.com/login.php', data={
