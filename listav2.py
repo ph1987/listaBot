@@ -24,7 +24,6 @@ events = []
 for url in urList:
 	eventsList = requests.get(url)
 	eventsListSourceCode = bs(eventsList.text, 'html.parser')
-	#print(eventsListSourceCode)
 	if "permalink" in url:
 		ClassInEventsListSourceCode = eventsListSourceCode.findAll("span", {"class": "br"})
 	else:
@@ -35,7 +34,7 @@ for url in urList:
 	for Class in ClassInEventsListSourceCode:
 		for a in Class.find_all('a', href=True):
 			urlSplitted = a['href'].split('?')
-			eventPageList.append(urlSplitted[0])  # /events/9999999999
+			eventPageList.append(urlSplitted[0])
 		
 	for event in eventPageList:
 		eventId = event.replace('/events/', '')
