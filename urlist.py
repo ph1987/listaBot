@@ -13,6 +13,11 @@ def all():
 def one():
     urList.append('https://m.facebook.com/pg/casadamatriz/events')
     return urList
+    
+def protected():
+    urList.append('https://m.facebook.com/barbukowskirio/events')
+    urList.append('https://m.facebook.com/fosfoboxbarclub/events')
+    return urList
 
 
 #urList.append('https://m.facebook.com/pg/casadamatriz/events')
@@ -33,7 +38,7 @@ def one():
 #urList.append('https://m.facebook.com/GatoNegroPub/pages/permalink/?view_type=tab_events')
 #urList.append('https://m.facebook.com/brookspubrj/pages/permalink/?view_type=tab_events')
 #urList.append('https://m.facebook.com/pg/festarockcetera/events')									#só aparece se tiver logado
-#urList.append('https://m.facebook.com/pg/festarockme/events/')										#só aparece se tiver logado
+#urList.append('https://m.facebook.com/festarockme/events/')										#só aparece se tiver logado
 #urList.append('https://m.facebook.com/pg/pubpanqss/events')
 #urList.append('https://m.facebook.com/rotarj65/pages/permalink/?view_type=tab_events')
 #urList.append('https://m.facebook.com/barbukowskirio/events')      #só aparece se tiver logado
