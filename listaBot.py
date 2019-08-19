@@ -4,6 +4,7 @@ import json
 import datetime
 import formatdate
 import urlist
+import unicodedata
 
 class Event:
     def __init__(self, id, url, title, datefull, dateformatted, locationName, address, img):
@@ -46,6 +47,7 @@ for url in urList:
 
 		tagDT = eventPageSourceCode.find_all('dt')
 		eventDateFull = str(tagDT[0].text)
+		eventDateFull = strip_accents(eventDateFull)
 
 		eventDateFormatted = formatdate.format_date(eventDateFull)
 		if eventDateFormatted == "ERROR":
@@ -70,4 +72,10 @@ for url in urList:
 events.sort(key=lambda x: x.dateformatted, reverse=False)
 json_string = json.dumps([ob.__dict__ for ob in events], indent=4)
 updated_at = datetime.datetime.now()
-print (json_string)
+
+parsed = json.loads(json_string)
+with open('events.json', 'w', encoding="utf-8") as outfile:
+	json.dump([ob.__dict__ for ob in events], outfile, indent=4, ensure_ascii=False)
+
+
+#print (json_string)
