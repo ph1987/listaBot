@@ -17,7 +17,7 @@ class Event:
         self.address = address
         self.img = img
 
-urList = urlist.one()
+urList = urlist.all()
 events = []
 
 for url in urList:
@@ -43,17 +43,28 @@ for url in urList:
 		eventPageSourceCode = bs(eventPage.text, 'html.parser')
 
 		tagDD = eventPageSourceCode.find_all('dd')
-		eventStreetAddress = str(tagDD[1].text)
+
+		try:
+			eventStreetAddress = str(tagDD[1].text)
+		except:
+			eventStreetAddress = ''
 
 		tagDT = eventPageSourceCode.find_all('dt')
-		eventDateFull = str(tagDT[0].text)
-		eventDateFull = strip_accents(eventDateFull)
+
+		try:
+			eventDateFull = str(tagDT[0].text)
+		except:
+			eventDateFull = ''
 
 		eventDateFormatted = formatdate.format_date(eventDateFull)
 		if eventDateFormatted == "ERROR":
 			continue          #move to next iteration if can't format the event date
 
-		eventLocationName = str(tagDT[1].text)
+		try:
+			eventLocationName = str(tagDT[1].text)
+		except:
+			eventLocationName = ''
+			
 		tagBE = eventPageSourceCode.find("div", {"class": "be"})
 
 		try:
@@ -67,7 +78,8 @@ for url in urList:
 		if (datetime.datetime.now() + datetime.timedelta(hours=-6)) < eventDateFormatted:
 			events.append(
 				Event(eventId, eventUrl, eventTitle, eventDateFull, str(eventDateFormatted), eventLocationName, eventStreetAddress, eventImgSrc)
-			)		
+			)	
+			print(eventTitle + " added")	
 
 events.sort(key=lambda x: x.dateformatted, reverse=False)
 json_string = json.dumps([ob.__dict__ for ob in events], indent=4)
