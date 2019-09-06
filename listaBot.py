@@ -39,6 +39,8 @@ for url in urList:
 		eventId = event.replace('/events/', '')
 		#verificar se o id evento já existe na lista
 		eventUrl = 'https://m.facebook.com' + event
+		eventUrl2 = 'https://facebook.com' + event
+
 		eventPage = requests.get(eventUrl)
 		eventPageSourceCode = bs(eventPage.text, 'html.parser')
 
@@ -77,7 +79,7 @@ for url in urList:
         #if datetime.datetime.now() < eventDateFormatted:
 		if (datetime.datetime.now() + datetime.timedelta(hours=-6)) < eventDateFormatted:
 			events.append(
-				Event(eventId, eventUrl, eventTitle, eventDateFull, str(eventDateFormatted), eventLocationName, eventStreetAddress, eventImgSrc)
+				Event(eventId, eventUrl2, eventTitle, eventDateFull, str(eventDateFormatted), eventLocationName, eventStreetAddress, eventImgSrc)
 			)	
 			print(eventTitle + " added")	
 
