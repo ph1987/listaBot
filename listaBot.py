@@ -2,9 +2,63 @@ import requests
 from bs4 import BeautifulSoup as bs
 import json
 import datetime
-import formatdate
-import urlist
+#import formatdate
+#import urlist
 import unicodedata
+
+def all():
+    urList = []
+    with open('fbpages.json', 'r') as f:
+        data = json.load(f)
+        for e in data['events']:
+            if (len(e['url']) > 0):
+                urList.append(e['url'])
+    return urList
+
+def return_monthNumber(month):
+    switcher = {
+        "janeiro": 1,
+        "fevereiro": 2,
+        "março": 3,
+        "abril": 4,
+        "maio": 5,
+        "junho": 6,
+        "julho": 7,
+        "agosto": 8,
+        "setembro": 9,
+        "outubro": 10,
+        "novembro": 11,
+        "dezembro": 12
+    }
+    return switcher.get(month, "Invalid month")
+
+def format_date(datefull):
+    try:
+        dtsplittedByComma = datefull.split(",")
+        dtWithPrep = dtsplittedByComma[1].strip()
+        dtsplittedByPrep = dtWithPrep.split("de")
+        day = dtsplittedByPrep[0].strip()
+        month = dtsplittedByPrep[1].strip()
+        monthNumber = return_monthNumber(month)
+        year = dtsplittedByPrep[2].strip()
+        # Sábado, 6 de julho de 2019 de 20:00 a 05:00 UTC-03 vs Domingo, 14 de julho de 2019 às 17:00 UTC-03
+        if "às" in year:
+            yearSplitted = year.split("às")
+            year = yearSplitted[0].strip()
+            timeSplitted = yearSplitted[1].strip().split(" ")
+            time = timeSplitted[0]
+        else:
+            time = dtsplittedByPrep[3]
+		# /fix inconsistência na data por extenso
+        timeSplitted = time.split("a")
+        timeSplitted2 = timeSplitted[0].strip().split(":")
+        hour = timeSplitted2[0]
+        minute = timeSplitted2[1]
+
+        dateformatted = datetime.datetime(int(year), monthNumber, int(day), int(hour), int(minute), 00)
+        return dateformatted
+    except:
+        return "ERROR"
 
 class Event:
     def __init__(self, id, url, title, datefull, dateformatted, locationName, address, img):
@@ -17,7 +71,7 @@ class Event:
         self.address = address
         self.img = img
 
-urList = urlist.all()
+urList = all()
 events = []
 
 for url in urList:
@@ -54,11 +108,12 @@ for url in urList:
 		tagDT = eventPageSourceCode.find_all('dt')
 
 		try:
-			eventDateFull = str(tagDT[0].text)
+			eventDateFull = str(tagDT[0].text.replace("UTC-03","")).strip()
 		except:
 			eventDateFull = ''
 
-		eventDateFormatted = formatdate.format_date(eventDateFull)
+		#eventDateFormatted = formatdate.format_date(eventDateFull)
+		eventDateFormatted = format_date(eventDateFull)
 		if eventDateFormatted == "ERROR":
 			continue          #move to next iteration if can't format the event date
 
